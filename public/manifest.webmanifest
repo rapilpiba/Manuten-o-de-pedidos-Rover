@@ -1,0 +1,16 @@
+{
+  "name": "Rover Pizzaria — Controle de Pedidos",
+  "short_name": "Rover Pizzaria",
+  "description": "Controle de pedidos dos funcionários. Funciona sem internet.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fdf7f2",
+  "theme_color": "#b9242c",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "./rover-pizzaria-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./rover-pizzaria-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
