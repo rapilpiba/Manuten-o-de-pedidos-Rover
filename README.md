@@ -86,3 +86,7 @@ public/manifest.webmanifest Dados de instalação do aplicativo
 Os valores são guardados em **centavos, como número inteiro**. Dinheiro em
 ponto flutuante acumula erro de arredondamento, e um relatório de fechamento
 não pode fechar com um centavo de diferença.
+
+## Preview
+
+A preview da versão se encontra em https://pedidos-rover.vercel.app/
