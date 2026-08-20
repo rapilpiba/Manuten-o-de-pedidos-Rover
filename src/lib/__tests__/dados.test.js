@@ -119,6 +119,46 @@ describe('filtrarPedidos e resumir', () => {
   });
 });
 
+describe('busca por funcionário — ID casa exato, nome casa por trecho', () => {
+  // Cenário exatamente como o relatado: ryan é o 14, titi é o 1.
+  const pedidos = [
+    { ...pedidoBase, id: 'a', numero: 1, funcionarioId: '14', funcionarioNome: 'ryan' },
+    { ...pedidoBase, id: 'b', numero: 2, funcionarioId: '14', funcionarioNome: 'ryan' },
+    { ...pedidoBase, id: 'c', numero: 3, funcionarioId: '1', funcionarioNome: 'titi' }
+  ];
+
+  it('buscar o ID 1 não traz os pedidos do ID 14', () => {
+    const achados = filtrarPedidos(pedidos, { funcionario: '1' });
+    expect(achados).toHaveLength(1);
+    expect(achados[0].funcionarioNome).toBe('titi');
+  });
+
+  it('buscar o ID 14 traz só os pedidos do 14', () => {
+    const achados = filtrarPedidos(pedidos, { funcionario: '14' });
+    expect(achados).toHaveLength(2);
+    expect(achados.every((p) => p.funcionarioId === '14')).toBe(true);
+  });
+
+  it('nome continua achando por trecho', () => {
+    expect(filtrarPedidos(pedidos, { funcionario: 'ry' })).toHaveLength(2);
+    expect(filtrarPedidos(pedidos, { funcionario: 'ti' })).toHaveLength(1);
+  });
+
+  it('ignora maiúsculas e espaços nas pontas', () => {
+    expect(filtrarPedidos(pedidos, { funcionario: '  RYAN  ' })).toHaveLength(2);
+  });
+
+  it('zeros à esquerda são IDs diferentes', () => {
+    const comZero = [...pedidos, { ...pedidoBase, id: 'd', numero: 4, funcionarioId: '01', funcionarioNome: 'ana' }];
+    expect(filtrarPedidos(comZero, { funcionario: '01' })).toHaveLength(1);
+    expect(filtrarPedidos(comZero, { funcionario: '1' })).toHaveLength(1);
+  });
+
+  it('busca sem resultado devolve lista vazia', () => {
+    expect(filtrarPedidos(pedidos, { funcionario: '99' })).toHaveLength(0);
+  });
+});
+
 describe('numeroPedido', () => {
   it('completa com zeros à esquerda', () => {
     expect(numeroPedido(1)).toBe('001');

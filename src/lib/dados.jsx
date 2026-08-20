@@ -173,6 +173,19 @@ export function useDados() {
   return contexto;
 }
 
+/**
+ * O ID casa por igualdade; o nome casa por trecho.
+ *
+ * Antes o ID também casava por trecho, e "14".includes("1") é verdadeiro: uma
+ * busca pelo funcionário 1 trazia os pedidos do funcionário 14. Em nome,
+ * procurar por trecho é o esperado (digitar "ry" acha "ryan"); em ID, não —
+ * 1 e 14 são pessoas diferentes.
+ */
+function combinaFuncionario(pedido, busca) {
+  if (pedido.funcionarioId.toLowerCase() === busca) return true;
+  return pedido.funcionarioNome.toLowerCase().includes(busca);
+}
+
 /** Filtra pedidos por funcionário, período e situação. */
 export function filtrarPedidos(pedidos, filtros) {
   const busca = String(filtros.funcionario || '').trim().toLowerCase();
@@ -181,9 +194,7 @@ export function filtrarPedidos(pedidos, filtros) {
 
   return pedidos
     .filter((p) => {
-      if (busca && !p.funcionarioNome.toLowerCase().includes(busca) && !p.funcionarioId.toLowerCase().includes(busca)) {
-        return false;
-      }
+      if (busca && !combinaFuncionario(p, busca)) return false;
       const momento = new Date(p.criadoEm).getTime();
       if (de !== null && momento < de) return false;
       if (ate !== null && momento > ate) return false;
